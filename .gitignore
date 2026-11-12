@@ -1,0 +1,10 @@
+# Tài liệu của bác sĩ / người dùng: KHÔNG BAO GIỜ đưa lên git
+*.pptx
+*.potx
+*.ppt
+*.pdf
+*.key
+images/
+promt.txt
+samples/
+private/
