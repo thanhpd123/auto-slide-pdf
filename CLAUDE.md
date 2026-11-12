@@ -9,13 +9,13 @@ Trang web (giao diện **tiếng Việt**) giúp người **không biết gì v�
 
 ## Đã chốt với chủ dự án
 - Hai chế độ: **B "Làm đẹp slide cũ" làm trước**, A "Làm slide mới" (chủ đề, đối tượng nghe, thời lượng, tài liệu tham khảo) làm sau.
-- Ngôn ngữ slide do người dùng chọn. Giao diện web bằng tiếng Việt.
+- Ngôn ngữ slide do người dùng chọn. **Chế độ B cũng dịch được** (mặc định giữ nguyên ngôn ngữ gốc). Giao diện web bằng tiếng Việt.
 - Bán cho bất kỳ ai. **Người dùng tự trả tiền AI bằng key của mình**, phần mềm hướng dẫn đăng ký, dẫn link thẳng tới trang thanh toán và trang lấy key. Mặc định có bản miễn phí dùng Gemini API free của chủ dự án, model **Gemma 4 31B**.
 - Template: kết hợp (1) thư viện tự làm, (2) nguồn có giấy phép cho phép thương mại và phân phối lại, (3) dẫn link để người dùng tự tải. **Không crawl** template từ các trang cấm phân phối lại.
 - Chủ dự án muốn xem mockup giao diện **sau**, đừng tự đề xuất lại lúc này.
 
 ## Quy tắc bắt buộc
-1. **Không bao giờ để AI viết lại, bịa hoặc sửa câu chữ, số liệu y khoa hay trích dẫn của người dùng.** Ở chế độ B, AI chỉ trả về JSON (mã khối, layout, chỗ chia). Code mới là bên chép chữ gốc. Luôn có bước code so khớp chữ cũ với chữ mới.
+1. **Không bao giờ để AI viết lại, bịa hoặc sửa câu chữ, số liệu y khoa hay trích dẫn của người dùng.** Ở chế độ B, AI chỉ trả về JSON (mã khối, layout, chỗ chia). Code mới là bên chép chữ gốc. Luôn có bước code so khớp chữ cũ với chữ mới. **Ngoại lệ duy nhất: dịch** khi bác sĩ chọn ngôn ngữ khác. Khi đó dịch sát, giữ nguyên số liệu, tên thuốc, tên người và trích dẫn, và code kiểm chứng những thứ này còn đủ (spec mục 2.1).
 2. **Code làm việc máy móc, AI làm việc cần suy nghĩ.** Code lo đọc, đổ, đo tràn, render, crop. AI lo hiểu vai trò khối chữ, chọn layout, chọn chỗ chia, gợi ý ảnh. Mọi tính năng phải chạy được với model nhỏ miễn phí (Gemma), không chỉ với Claude.
 3. Không thu nhỏ chữ để nhét vừa khung. Nếu tràn thì chia slide.
 4. Ảnh và template phải rõ giấy phép, kèm `credits.txt`.

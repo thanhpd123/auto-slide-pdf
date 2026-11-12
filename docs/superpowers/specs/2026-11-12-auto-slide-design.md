@@ -17,7 +17,7 @@ Người dùng mục tiêu là bác sĩ, và về sau là bất kỳ ai cần th
   1. Lấy template làm gốc, giữ nguyên theme, slide master, layout, font, màu.
   2. Xoá các slide mẫu của template.
   3. Với mỗi slide cũ, chọn layout phù hợp nhất (title, section, nội dung, 2 cột, chữ + ảnh, bảng, biểu đồ, closing...) rồi đổ nội dung vào placeholder.
-  4. **Giữ nguyên chữ, thứ tự slide, hình ảnh, bảng và speaker notes. Không viết lại nội dung.**
+  4. **Giữ nguyên chữ, thứ tự slide, hình ảnh, bảng và speaker notes. Không viết lại nội dung.** Chỉ có một ngoại lệ: dịch sang ngôn ngữ bác sĩ chọn (xem mục 2.1).
   5. Slide nhiều chữ thì chia thành 2 slide, không thu nhỏ chữ và không để tràn.
   6. Không sửa file gốc.
   7. Render từng slide ra ảnh để kiểm tra tràn chữ và lệch khung, rồi sửa.
@@ -26,6 +26,14 @@ Người dùng mục tiêu là bác sĩ, và về sau là bất kỳ ai cần th
   10. Không chèn ảnh vào slide nhiều chữ hoặc slide có bảng/biểu đồ.
 - Cuối cùng báo cho người dùng biết slide nào bị chia và slide nào đổi bố cục.
 - Giao diện web hoàn toàn bằng **tiếng Việt**.
+
+### 2.1 Dịch slide (đã chốt: có dịch, bác sĩ chọn ngôn ngữ)
+- Bác sĩ chọn **ngôn ngữ đầu ra**. Mặc định là "Giữ nguyên ngôn ngữ gốc".
+- **Giữ nguyên ngôn ngữ gốc:** chữ trùng khớp tuyệt đối với bản cũ, như quy tắc 4.
+- **Chọn ngôn ngữ khác:** AI dịch từng khối chữ, kể cả speaker notes. Dịch là **dịch sát, không tóm tắt, không thêm ý, không bỏ ý**. Những thứ sau **giữ nguyên, không dịch**: con số, đơn vị, %, giá trị p, khoảng tin cậy; tên thuốc; tên người, tên tác giả và **dòng trích dẫn nguồn**; tên viết tắt chuyên môn (bác sĩ có thể thêm danh sách thuật ngữ không dịch).
+- Code kiểm chứng bản dịch: mọi con số và mọi dòng trích dẫn của bản gốc phải có mặt trong bản dịch, mỗi khối gốc đều có đúng một bản dịch. Khối nào không đạt thì dịch lại. Dịch lại vẫn không đạt thì giữ nguyên chữ gốc và đánh dấu để bác sĩ xem.
+- Dịch xong mới đo tràn chữ và chia slide, vì bản dịch có thể dài hơn bản gốc.
+- Kết quả kèm **file đối chiếu song ngữ**, mỗi khối gồm bản gốc và bản dịch, để bác sĩ soát thuật ngữ. Báo cáo ghi rõ "Bản dịch do AI làm, bác sĩ cần đọc lại trước khi trình bày".
 
 **Bản sau (không làm trong bản đầu, nhưng kiến trúc phải chừa chỗ):** chế độ A, "Làm slide mới". Người dùng nhập chủ đề, đối tượng nghe, thời lượng, tài liệu tham khảo (PDF, bài báo), và ngôn ngữ slide do người dùng chọn. AI sẽ viết dàn ý và nội dung **dựa trên tài liệu**.
 
@@ -39,7 +47,7 @@ Người dùng mục tiêu là bác sĩ, và về sau là bất kỳ ai cần th
 
 ## 4. Điều tuyệt đối không được xảy ra (anti-goals)
 
-- **AI tự sửa, bịa hoặc "làm đẹp" câu chữ, số liệu y khoa hay trích dẫn.** Ở chế độ B, chữ trên slide mới phải trùng khớp với chữ trên slide cũ. Phần mềm phải **tự kiểm chứng bằng code**: so tập chữ cũ với tập chữ mới (đã chuẩn hoá khoảng trắng), và báo lỗi nếu mất hoặc thêm chữ. Ngoại lệ duy nhất là những phần chữ được lặp lại khi chia slide, ví dụ tiêu đề có thêm "(tiếp)" hoặc "(2/2)".
+- **AI tự sửa, bịa hoặc "làm đẹp" câu chữ, số liệu y khoa hay trích dẫn.** Ở chế độ B, nếu giữ ngôn ngữ gốc thì chữ trên slide mới phải trùng khớp với chữ trên slide cũ. Nếu dịch thì làm theo các ràng buộc ở mục 2.1. Phần mềm phải **tự kiểm chứng bằng code**: so tập chữ cũ với tập chữ mới (đã chuẩn hoá khoảng trắng), và báo lỗi nếu mất hoặc thêm chữ. Ngoại lệ duy nhất là những phần chữ được lặp lại khi chia slide, ví dụ tiêu đề có thêm "(tiếp)" hoặc "(2/2)".
 - Chữ tràn khung, chữ bị thu nhỏ đến mức khó đọc, ảnh bị méo.
 - Dùng ảnh hoặc template không rõ giấy phép.
 - Giữ tài liệu của người dùng lâu dài trên server.
@@ -85,22 +93,24 @@ Khi làm bằng tay, Claude tự viết code, tự render và tự sửa. Model 
 | Đo chữ có vừa khung không (tính theo font/cỡ chữ của template) | Code |
 | Render ra ảnh / PDF (LibreOffice headless) | Code |
 | Crop ảnh vừa khung, không méo | Code |
-| Kiểm chứng "chữ cũ = chữ mới" | Code |
+| Kiểm chứng "chữ cũ = chữ mới", hoặc với bản dịch thì kiểm chứng số liệu và trích dẫn còn đủ | Code |
+| Dịch từng khối chữ (khi bác sĩ chọn ngôn ngữ khác) | AI |
 | Hiểu vai trò của từng khối chữ trên slide cũ (tiêu đề, nhãn section, bullet, chú thích nguồn, số liệu nổi bật, footer cần bỏ) | AI |
 | Chọn layout cho từng slide | AI, kèm luật dự phòng bằng code |
 | Quyết định chia slide ở chỗ nào cho hợp ý | AI, kèm luật dự phòng bằng code |
 | Slide nào cần minh hoạ, tìm ảnh bằng từ khoá gì | AI |
 | Xem ảnh tìm được có đúng chủ đề không | AI có khả năng nhìn ảnh, hoặc bỏ qua nếu model không hỗ trợ |
 
-AI luôn trả về **JSON theo schema cố định** chứ không trả về code. Phần mềm kiểm tra JSON và gọi lại AI nếu sai. Câu chữ của slide **không bao giờ đi qua AI để được viết lại**. AI chỉ trả về *mã số* của các khối chữ và cách xếp chúng, còn code mới là bên chép chữ gốc vào slide mới. Đây là cách bảo đảm anti-goal số 1.
+AI luôn trả về **JSON theo schema cố định** chứ không trả về code. Phần mềm kiểm tra JSON và gọi lại AI nếu sai. Câu chữ của slide **không bao giờ đi qua AI để được viết lại**. Ngoại lệ duy nhất là bước dịch, và bước này được tách riêng (mục 2.1). AI chỉ trả về *mã số* của các khối chữ và cách xếp chúng, còn code mới là bên chép chữ gốc vào slide mới. Đây là cách bảo đảm anti-goal số 1.
 
 ### 6.2 Luồng xử lý (chế độ B)
 1. **Tách nội dung:** code đọc slide cũ thành danh sách khối, mỗi khối có mã số, loại (chữ / ảnh / bảng / nhóm hình), vị trí, cỡ chữ và nội dung.
 2. **Phân tích:** AI nhận danh sách khối của từng slide (không có toàn bộ file) cùng danh sách layout của template. AI trả về: layout chọn, khối nào vào placeholder nào, khối nào bỏ (ví dụ footer "<tên hội nghị> · <số trang>" vì template đã có số trang), slide có cần chia không và chia sau khối nào, có cần ảnh không và từ khoá tìm ảnh.
-3. **Dựng slide:** code tạo file mới từ template rồi đổ nội dung vào.
-4. **Kiểm tra:** code đo tràn chữ. Slide nào tràn thì chia (theo gợi ý của AI hoặc luật dự phòng) rồi dựng lại. Render ra ảnh để làm ảnh xem trước và để kiểm tra lần cuối.
-5. **Ảnh minh hoạ:** tìm trên Wikimedia Commons, lọc theo giấy phép, AI xem ảnh, code crop rồi chèn, và ghi `credits.txt`.
-6. **Kiểm chứng và trả kết quả:** so chữ cũ với chữ mới. Trả về `.pptx`, PDF (tuỳ chọn), `credits.txt`, kèm báo cáo tiếng Việt về slide nào bị chia hoặc đổi bố cục, và cảnh báo nếu có.
+3. **Dịch (nếu bác sĩ chọn):** AI dịch từng khối, code kiểm chứng số liệu và trích dẫn (mục 2.1).
+4. **Dựng slide:** code tạo file mới từ template rồi đổ nội dung vào.
+5. **Kiểm tra:** code đo tràn chữ. Slide nào tràn thì chia (theo gợi ý của AI hoặc luật dự phòng) rồi dựng lại. Render ra ảnh để làm ảnh xem trước và để kiểm tra lần cuối.
+6. **Ảnh minh hoạ:** tìm trên Wikimedia Commons, lọc theo giấy phép, AI xem ảnh, code crop rồi chèn, và ghi `credits.txt`.
+7. **Kiểm chứng và trả kết quả:** so chữ cũ với chữ mới (hoặc kiểm chứng bản dịch). Trả về `.pptx`, PDF (tuỳ chọn), `credits.txt`, file đối chiếu song ngữ (nếu có dịch), kèm báo cáo tiếng Việt về slide nào bị chia hoặc đổi bố cục, và cảnh báo nếu có.
 
 ### 6.3 Điểm khó đã biết
 Slide cũ thường **không dùng placeholder** mà vẽ tay bằng nhiều text box và hình. Ví dụ hay gặp là biểu đồ cột vẽ bằng hình chữ nhật + freeform + nhãn %. Bản đầu sẽ xử lý như sau:
@@ -120,14 +130,14 @@ Chủ dự án muốn xem mockup sau, nên ở đây chỉ mô tả bằng chữ
 1. **Trang chủ:** giới thiệu ngắn và hai lựa chọn. "Làm đẹp slide cũ" bấm được. "Làm slide mới" ghi "Sắp có".
 2. **Bước 1 – Tải slide cũ** (`.pptx`).
 3. **Bước 2 – Chọn template:** thư viện có sẵn, tự tải lên, hoặc link "Tìm template đẹp ở đâu?".
-4. **Bước 3 – Tuỳ chọn:** ngôn ngữ của các chữ phần mềm tự thêm như "(tiếp)" (chế độ B không dịch nội dung); bật/tắt ảnh minh hoạ; xuất thêm PDF.
+4. **Bước 3 – Tuỳ chọn:** ngôn ngữ đầu ra (mặc định giữ nguyên ngôn ngữ gốc, hoặc chọn tiếng Anh, tiếng Việt...; có ô nhập thuật ngữ không dịch); bật/tắt ảnh minh hoạ; xuất thêm PDF.
 5. **Bước 4 – Chọn AI:** "Miễn phí (Gemma)" kèm cảnh báo quyền riêng tư, hoặc "Dùng key Claude của tôi" kèm link "Hướng dẫn lấy key".
 6. **Bấm "Tạo slide"** → trang tiến độ → trang kết quả gồm ảnh xem trước từng slide, nút tải về, báo cáo slide bị chia hoặc đổi bố cục, danh sách nguồn ảnh.
 
 ## 8. Thế nào là thành công
 - Chạy trên máy với bộ mẫu riêng của chủ dự án (đọc trực tiếp từ `D:\File\ppt`, không chép vào repo) cho ra kết quả mà chủ dự án đánh giá ngang hoặc gần bằng bản làm tay, **bằng cả Gemma miễn phí lẫn Claude**.
 - Test tự động trong repo chỉ dùng file .pptx tự tạo, không chứa nội dung của bác sĩ.
-- Kiểm chứng chữ đạt 100%: không mất, không thêm, không đổi chữ.
+- Kiểm chứng chữ đạt 100%: không mất, không thêm, không đổi chữ (khi giữ ngôn ngữ gốc). Khi dịch thì 100% số liệu và trích dẫn còn đủ.
 - Không slide nào tràn chữ khi mở bằng PowerPoint.
 - Một người không biết gì về AI dùng được từ đầu đến cuối mà không cần hỏi.
 
